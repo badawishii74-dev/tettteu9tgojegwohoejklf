@@ -31,7 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String _selectedTemplateType = 'Certificates'; // or 'Security'
  final String _certificatesTemplate =
     "*** ادارة التجنيد والتعبئة ***\n"
-    " لقد قمت بسداد الرسوم الشهادة برجاء ارسال صورة شخصية وصورة البطاقه لطباعه الشهاده على رقم الوتساب\n"
+    " لقد قمت بسداد رسوم الشهادة برجاء ارسال صورة شخصية وصورة البطاقه لطباعه الشهاده على رقم الوتساب\n"
     " 01094258960";
 
   final String _securityTemplate =
