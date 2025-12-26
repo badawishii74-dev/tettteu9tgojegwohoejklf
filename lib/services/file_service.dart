@@ -113,7 +113,7 @@ class FileService {
         if (!isHeaderParsed) {
              for (int i = 0; i < row.length; i++) {
                  String val = row[i].toString().toLowerCase().trim();
-                 if (val.contains('number') || val.contains('phone')) headerMap['number'] = i;
+                 if (val.contains('number') || val.contains('phone') || val.contains('mobile') || val.contains('رقم التيلفون')) headerMap['number'] = i;
                  if (val == 'name') headerMap['name'] = i;
                  if (val == 'service') headerMap['service'] = i;
                  if (val == 'location') headerMap['location'] = i;

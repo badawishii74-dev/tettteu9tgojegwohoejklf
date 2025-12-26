@@ -30,15 +30,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // Template State
   String _selectedTemplateType = 'Certificates'; // or 'Security'
  final String _certificatesTemplate =
-    "السيد / \${Name}\n"
-    "لقد قمتم بسداد الرسوم، يرجى إرسال صورة شخصية وصورة البطاقة على رقم الواتساب التالي:\n"
-    "wa.me/+201234567890";
+    "*** ادارة التجنيد والتعبئة ***\n"
+    " لقد قمت بسداد رسوم الشهادة برجاء ارسال صورة شخصية وصورة البطاقه لطباعه الشهاده على رقم الوتساب\n"
+    " 01094258960";
 
   final String _securityTemplate =
-    "السيد / \${Name}\n"
-    "لقد تم قبول التصديق الأمني الخاص بكم لدولة \${country}\n"
-    "وساري من تاريخ \${tasdek_from} إلى \${tasdek_to}\n"
-    "علمًا بأن مدة تصريح السفر 15 يوم من تاريخ السداد";
+    "*** ادارة التجنيد والتعبئة ***\n"
+    " لقد تم قبول التصديق الامني الخاص بكم يمكنك تسجيل تصريح سفر من الموقع الالكتروني \n"
+    "علما بأن مدة تصريح السفر 15 يوم من تاريخ الدفع";
 
   // State
   List<SmsRow> _rows = [];
@@ -289,17 +288,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         items: const [
                             DropdownMenuItem(value: 'Certificates', child: Text("Certificates / شهادات")),
                             DropdownMenuItem(value: 'Security', child: Text("Security Confirmation / التصديق الأمني")),
+                            DropdownMenuItem(value: 'Custom', child: Text("Custom / مخصص")),
                         ],
                         onChanged: (val) {
                             if (val == null) return;
                             setState(() {
                                 _selectedTemplateType = val;
-                                // Update text field if user hasn't heavily modified it? 
-                                // For now, just force update as per request behavior implication or simple UX
                                 if (val == 'Certificates') {
                                     _messageController.text = _certificatesTemplate;
-                                } else {
+                                } else if (val == 'Security') {
                                     _messageController.text = _securityTemplate;
+                                } else {
+                                    _messageController.clear();
                                 }
                             });
                         }
