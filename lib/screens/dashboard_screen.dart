@@ -255,131 +255,142 @@ class _DashboardScreenState extends State<DashboardScreen> {
           IconButton(onPressed: _exportLog, icon: const Icon(Icons.history))
         ],
       ),
-      body: Column(
-        children: [
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
           // Stats Row
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(child: StatCard(label: "Total / الكلي", value: "$_total", icon: Icons.list)),
-                Expanded(child: StatCard(label: "Sent / تم", value: "$_sent", color: Colors.green, icon: Icons.check)),
-                Expanded(child: StatCard(label: "Failed / فشل", value: "$_failed", color: Colors.red, icon: Icons.error)),
-              ],
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(child: StatCard(label: "Total / الكلي", value: "$_total", icon: Icons.list)),
+                  Expanded(child: StatCard(label: "Sent / تم", value: "$_sent", color: Colors.green, icon: Icons.check)),
+                  Expanded(child: StatCard(label: "Failed / فشل", value: "$_failed", color: Colors.red, icon: Icons.error)),
+                ],
+              ),
             ),
           ),
           
           // Controls
-          ConfigPanel(onConfigChanged: _updateConfig, isRunning: _isSending),
+          SliverToBoxAdapter(
+            child: ConfigPanel(onConfigChanged: _updateConfig, isRunning: _isSending),
+          ),
           
           // Message Template & Configuration
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                    // Template Selector
-                    DropdownButtonFormField<String>(
-                        value: _selectedTemplateType,
-                        decoration: const InputDecoration(
-                            labelText: "Type / نوع الرسالة",
-                            border: OutlineInputBorder()
-                        ),
-                        items: const [
-                            DropdownMenuItem(value: 'Certificates', child: Text("Certificates / شهادات")),
-                            DropdownMenuItem(value: 'Security', child: Text("Security Confirmation / التصديق الأمني")),
-                            DropdownMenuItem(value: 'Custom', child: Text("Custom / مخصص")),
-                        ],
-                        onChanged: (val) {
-                            if (val == null) return;
-                            setState(() {
-                                _selectedTemplateType = val;
-                                if (val == 'Certificates') {
-                                    _messageController.text = _certificatesTemplate;
-                                } else if (val == 'Security') {
-                                    _messageController.text = _securityTemplate;
-                                } else {
-                                    _messageController.clear();
-                                }
-                            });
-                        }
-                    ),
-                    const SizedBox(height: 8),
-                    // TextField
-                    TextField(
-                        controller: _messageController,
-                        maxLines: 4,
-                        decoration: const InputDecoration(
-                            labelText: "Message Template / نص الرسالة",
-                            border: OutlineInputBorder(),
-                            helperText: "Vars: \${Name}, \${country}, \${tasdek_from}, \${tasdek_to}, \${service}",
-                        ),
-                        onChanged: (v) {
-                            if (mounted) setState(() {}); 
-                        },
-                    ),
-                ],
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                      // Template Selector
+                      DropdownButtonFormField<String>(
+                          value: _selectedTemplateType,
+                          decoration: const InputDecoration(
+                              labelText: "Type / نوع الرسالة",
+                              border: OutlineInputBorder()
+                          ),
+                          items: const [
+                              DropdownMenuItem(value: 'Certificates', child: Text("Certificates / شهادات")),
+                              DropdownMenuItem(value: 'Security', child: Text("Security Confirmation / التصديق الأمني")),
+                              DropdownMenuItem(value: 'Custom', child: Text("Custom / مخصص")),
+                          ],
+                          onChanged: (val) {
+                              if (val == null) return;
+                              setState(() {
+                                  _selectedTemplateType = val;
+                                  if (val == 'Certificates') {
+                                      _messageController.text = _certificatesTemplate;
+                                  } else if (val == 'Security') {
+                                      _messageController.text = _securityTemplate;
+                                  } else {
+                                      _messageController.clear();
+                                  }
+                              });
+                          }
+                      ),
+                      const SizedBox(height: 8),
+                      // TextField
+                      TextField(
+                          controller: _messageController,
+                          maxLines: 4,
+                          decoration: const InputDecoration(
+                              labelText: "Message Template / نص الرسالة",
+                              border: OutlineInputBorder(),
+                              helperText: "Vars: \${Name}, \${country}, \${tasdek_from}, \${tasdek_to}, \${service}",
+                          ),
+                          onChanged: (v) {
+                              if (mounted) setState(() {}); 
+                          },
+                      ),
+                  ],
+              ),
             ),
           ),
           
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _rows.isEmpty 
-                      ? ElevatedButton.icon(
-                        onPressed: _isSending ? null : _pickFile,
-                        icon: const Icon(Icons.upload_file),
-                        label: const Text('Load File / اختر ملف'),
-                        style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
-                      )
-                      : ElevatedButton.icon(
-                        onPressed: _isSending ? null : _clearFile,
-                        icon: const Icon(Icons.delete, color: Colors.white),
-                        label: const Text('Clear File / حذف الملف', style: TextStyle(color: Colors.white)),
-                        style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: Colors.red,
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _rows.isEmpty 
+                        ? ElevatedButton.icon(
+                          onPressed: _isSending ? null : _pickFile,
+                          icon: const Icon(Icons.upload_file),
+                          label: const Text('Load File / اختر ملف'),
+                          style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                        )
+                        : ElevatedButton.icon(
+                          onPressed: _isSending ? null : _clearFile,
+                          icon: const Icon(Icons.delete, color: Colors.white),
+                          label: const Text('Clear File / حذف الملف', style: TextStyle(color: Colors.white)),
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              backgroundColor: Colors.red,
+                          ),
                         ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: _isSending ? _stopSending : _startSending,
+                      icon: Icon(_isSending ? Icons.stop : Icons.send),
+                      label: Text(_isSending ? 'Stop / إيقاف' : 'Start / ابدأ'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: _isSending ? Colors.red.shade100 : Theme.of(context).colorScheme.primaryContainer,
+                          padding: const EdgeInsets.symmetric(vertical: 16)
                       ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _isSending ? _stopSending : _startSending,
-                    icon: Icon(_isSending ? Icons.stop : Icons.send),
-                    label: Text(_isSending ? 'Stop / إيقاف' : 'Start / ابدأ'),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: _isSending ? Colors.red.shade100 : Theme.of(context).colorScheme.primaryContainer,
-                        padding: const EdgeInsets.symmetric(vertical: 16)
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
           if (_isSending)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: LinearProgressIndicator(
-                value: _total > 0 ? (_sent + _failed) / _total : 0,
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LinearProgressIndicator(
+                  value: _total > 0 ? (_sent + _failed) / _total : 0,
+                ),
               ),
             ),
 
-          const Divider(),
+          const SliverToBoxAdapter(child: Divider()),
           
           // List
-          Expanded(
-            child: _rows.isEmpty
-                ? const Center(child: Text("Load a CSV/XLSX file to start\nحمل ملف للبدء", textAlign: TextAlign.center))
-                : ListView.builder(
-                    controller: _scrollController,
-                    itemCount: _rows.length,
-                    itemBuilder: (context, index) {
+          _rows.isEmpty
+              ? const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(child: Text("Load a CSV/XLSX file to start\nحمل ملف للبدء", textAlign: TextAlign.center)),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
                       final row = _rows[index];
-                      // Highlight current
                       return ListTile(
                         leading: CircleAvatar(
                           backgroundColor: _getStatusColor(row.status),
@@ -403,8 +414,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                       );
                     },
+                    childCount: _rows.length,
                   ),
-          ),
+                ),
         ],
       ),
     );
